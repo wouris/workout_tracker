@@ -7,7 +7,7 @@ import {
   NavigationContainer,
   StackActions,
 } from '@react-navigation/native';
-import NutritionScreen from './views/Nutrition';
+import RoutineScreen from './views/Nutrition';
 import ExercisesScreen from './views/Exercises';
 import {getHeaderTitle} from '@react-navigation/elements';
 import Header from './components/header/Header';
@@ -19,6 +19,17 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from './views/LoginView';
 import RegisterScreen from './views/Register';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {
+  faArrowsSpin,
+  faCircleUser,
+  faDumbbell, faMagnifyingGlass,
+  faPersonWalking,
+  faRecycle,
+  faRocket,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import ExerciseMenuView from "./views/ExerciseMenuView";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -74,16 +85,16 @@ function AppNavigator({navigation}) {
           let iconName;
 
           if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Exercises') {
-            iconName = focused ? 'barbell' : 'barbell-outline';
-          } else if (route.name === 'Nutrition') {
-            iconName = focused ? 'nutrition' : 'nutrition-outline';
+            iconName = 'rocket';
+          } else if (route.name === 'Search') {
+            iconName = 'magnifying-glass';
+          } else if (route.name === 'Workout') {
+            iconName = 'dumbbell';
           } else if (route.name === 'Account') {
-            iconName = focused ? 'person' : 'person-outline';
+            iconName = 'circle-user';
           }
 
-          // return <Ionicons name={iconName} size={size} color={color} />;
+          return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: 'tomato',
         tabBarStyle: {
@@ -91,8 +102,8 @@ function AppNavigator({navigation}) {
         },
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Exercises" component={ExercisesScreen} />
-      <Tab.Screen name="Nutrition" component={NutritionScreen} />
+      <Tab.Screen name="Search" component={HomeScreen} />
+      <Tab.Screen name="Workout" component={ExerciseMenuView} />
       <Tab.Screen name="Account" component={AccountStack} />
     </Tab.Navigator>
   );
@@ -109,6 +120,15 @@ export default function App() {
 
     getTheme();
   }, []);
+
+  library.add(
+    faDumbbell,
+    faPersonWalking,
+    faArrowsSpin,
+    faRocket,
+    faCircleUser,
+    faMagnifyingGlass,
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
