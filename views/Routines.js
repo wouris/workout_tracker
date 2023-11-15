@@ -1,11 +1,9 @@
-import {View, Text} from 'react-native';
+import {Routines} from '../components/exercise/RoutinesView';
 
 export default function RoutinesScreen({navigation}) {
   return (
     <>
-      <View>
-        <Text>Routines</Text>
-      </View>
+      <Routines navigation={navigation} />
     </>
   );
 }

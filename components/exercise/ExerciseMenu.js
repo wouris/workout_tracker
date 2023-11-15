@@ -1,16 +1,9 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  Pressable,
-  TouchableOpacity,
-} from 'react-native';
-import { StackActions } from "@react-navigation/native";
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {StackActions} from '@react-navigation/native';
 
 export const ExerciseMenu = ({navigation}) => {
   const styles = StyleSheet.create({
     box: {
-      // width: '100%',
       height: 100,
       backgroundColor: 'white',
       alignItems: 'center',
@@ -37,14 +30,16 @@ export const ExerciseMenu = ({navigation}) => {
         paddingLeft: 15,
         paddingRight: 15,
       }}>
-      <TouchableOpacity style={styles.box}>
+      <TouchableOpacity
+        style={styles.box}
+        onPress={() =>
+          navigation.dispatch(StackActions.push('ExerciseScreen'))
+        }>
         <Text style={styles.font}>Exercises</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.box}
-        onPress={() =>
-          navigation.dispatch(StackActions.push(''))
-        }>
+        onPress={() => navigation.dispatch(StackActions.push('RoutineScreen'))}>
         <Text style={styles.font}>Routines</Text>
       </TouchableOpacity>
     </View>

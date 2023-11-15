@@ -7,7 +7,7 @@ import {
   NavigationContainer,
   StackActions,
 } from '@react-navigation/native';
-import RoutineScreen from './views/Nutrition';
+import RoutineScreen from './views/Routines';
 import ExercisesScreen from './views/Exercises';
 import {getHeaderTitle} from '@react-navigation/elements';
 import Header from './components/header/Header';
@@ -23,13 +23,14 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {
   faArrowsSpin,
   faCircleUser,
-  faDumbbell, faMagnifyingGlass,
+  faDumbbell,
+  faMagnifyingGlass,
   faPersonWalking,
-  faRecycle,
   faRocket,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import ExerciseMenuView from "./views/ExerciseMenuView";
+} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import ExerciseMenuView from './views/ExerciseMenuView';
+import SearchScreen from './views/SearchView';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -102,7 +103,7 @@ function AppNavigator({navigation}) {
         },
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Search" component={HomeScreen} />
+      <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name="Workout" component={ExerciseMenuView} />
       <Tab.Screen name="Account" component={AccountStack} />
     </Tab.Navigator>
@@ -155,6 +156,8 @@ export default function App() {
             <Stack.Screen name="MainContent" component={AppNavigator} />
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+            <Stack.Screen name="ExerciseScreen" component={ExercisesScreen} />
+            <Stack.Screen name="RoutineScreen" component={RoutineScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ThemeProvider>

@@ -54,8 +54,8 @@ export const RegisterForm = ({navigation}) => {
       <View style={{paddingHorizontal: 50}}>
         <View style={{alignItems: 'center'}}>
           <ImageBackground
-            source={require('../../assets/background/lift.png')}
-            style={{height: 400, width: 400}}
+            source={require('../../assets/background/body2.png')}
+            style={{height: 400, width: 500}}
           />
         </View>
 

@@ -59,6 +59,7 @@ const Account = ({navigation, route}) => {
       justifyContent: 'space-around',
       flex: 1,
       alignItems: 'center',
+      gap: 10,
       text: {
         fontSize: 12,
         fontFamily: 'Roboto-Medium',
