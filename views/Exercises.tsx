@@ -1,37 +1,69 @@
-import {SafeAreaView, Text} from 'react-native';
-import React from 'react';
+import {Animated, FlatList, Image, SafeAreaView, Text, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
 import {getAllExercises} from '../services/DataReader';
 import {FlashList} from '@shopify/flash-list';
 import ExerciseView from '../components/exercise/ExerciseView';
 import {ExerciseGroup} from '../models/ExerciseGroup';
+import exercisesData from '../services/data.json';
+import FastImage from 'react-native-fast-image';
+import { GifControllerView } from 'react-native-gif-controller-view';
+import ImageURI from '../utils/ImageURI';
+
+
+const PAGE_SIZE = 3; // Set an appropriate page size
 
 const ExercisesScreen = () => {
-  const {data, isLoading, hasNextPage, fetchNextPage} = getAllExercises();
+  const [exerciseGroups, setExerciseGroups] = useState<ExerciseGroup[]>([]);
+  const [page, setPage] = useState(1);
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
+  useEffect(() => {
+    const loadExerciseGroups = () => {
+      const startIndex = (page - 1) * PAGE_SIZE;
+      const endIndex = startIndex + PAGE_SIZE;
 
-  const flattenData = data.pages.flatMap(page => page.data);
+      const newExerciseGroups = exercisesData.slice(startIndex, endIndex);
 
-  const loadNext = () => {
-    if (hasNextPage) {
-      fetchNextPage();
-    }
+      setExerciseGroups(prevExerciseGroups => [...prevExerciseGroups, ...newExerciseGroups]);
+    };
+
+    loadExerciseGroups();
+  }, [page]);
+
+  const renderItem = ({ item }: { item: ExerciseGroup }) => {
+    return (
+      <View>
+        <Text>{item.letter}</Text>
+        <FlatList
+          data={item.exercises}
+          keyExtractor={(exercise) => exercise.id}
+          renderItem={({ item: exercise }) => {
+            return (
+              <View>
+                <Text>{exercise.id}</Text>
+                <Text>{exercise.bodyPart}</Text>
+                <Text>{exercise.name}</Text>
+                <FastImage source={ImageURI[exercise.bodyPart][exercise.id]} style={{width: 100, height: 100}} />
+              </View>
+            );
+          }}
+        />
+      </View>
+    );
   };
-  // const blurhash =
-  //     '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
+  const handleEndReached = () => {
+    // Load more exercise groups when the user reaches the end of the list
+    setPage(prevPage => prevPage + 1);
+  };
+
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-      <FlashList
-        keyExtractor={(item: ExerciseGroup) => item.letter}
-        data={flattenData}
-        renderItem={({item}) => <ExerciseView data={item} />}
-        estimatedItemSize={1325}
-        onEndReached={loadNext}
-        onEndReachedThreshold={0.2}
-      />
-    </SafeAreaView>
+    <FlatList
+      data={exerciseGroups}
+      keyExtractor={(group) => group.letter}
+      renderItem={renderItem}
+      onEndReached={handleEndReached}
+      onEndReachedThreshold={0.1}
+    />
   );
 };
 

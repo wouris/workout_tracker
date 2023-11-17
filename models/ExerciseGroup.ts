@@ -1,6 +1,6 @@
-import {Exercise} from "./Exercise";
+import {Exercise} from './Exercise';
 
 export interface ExerciseGroup {
-    letter: string,
-    exercises: Exercise[]
+  letter: string;
+  exercises: Exercise[];
 }
