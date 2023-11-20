@@ -1,14 +1,9 @@
-import {Animated, FlatList, Image, SafeAreaView, Text, View} from 'react-native';
-import React, { useEffect, useState } from 'react';
-import {getAllExercises} from '../services/DataReader';
-import {FlashList} from '@shopify/flash-list';
-import ExerciseView from '../components/exercise/ExerciseView';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {ExerciseGroup} from '../models/ExerciseGroup';
 import exercisesData from '../services/data.json';
 import FastImage from 'react-native-fast-image';
-import { GifControllerView } from 'react-native-gif-controller-view';
 import ImageURI from '../utils/ImageURI';
-
 
 const PAGE_SIZE = 3; // Set an appropriate page size
 
@@ -23,26 +18,42 @@ const ExercisesScreen = () => {
 
       const newExerciseGroups = exercisesData.slice(startIndex, endIndex);
 
-      setExerciseGroups(prevExerciseGroups => [...prevExerciseGroups, ...newExerciseGroups]);
+      setExerciseGroups(prevExerciseGroups => [
+        ...prevExerciseGroups,
+        ...newExerciseGroups,
+      ]);
     };
 
     loadExerciseGroups();
   }, [page]);
 
-  const renderItem = ({ item }: { item: ExerciseGroup }) => {
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+    },
+  });
+
+  const renderItem = ({item}: {item: ExerciseGroup}) => {
     return (
       <View>
         <Text>{item.letter}</Text>
         <FlatList
           data={item.exercises}
-          keyExtractor={(exercise) => exercise.id}
-          renderItem={({ item: exercise }) => {
+          keyExtractor={exercise => exercise.id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.1}
+          renderItem={({item: exercise}) => {
             return (
-              <View>
+              <View style={styles.container}>
                 <Text>{exercise.id}</Text>
                 <Text>{exercise.bodyPart}</Text>
                 <Text>{exercise.name}</Text>
-                <FastImage source={ImageURI[exercise.bodyPart][exercise.id]} style={{width: 100, height: 100}} />
+                <FastImage
+                  source={ImageURI[exercise.bodyPart][exercise.id]}
+                  style={{width: 100, height: 100}}
+                />
               </View>
             );
           }}
@@ -59,10 +70,8 @@ const ExercisesScreen = () => {
   return (
     <FlatList
       data={exerciseGroups}
-      keyExtractor={(group) => group.letter}
+      keyExtractor={group => group.letter}
       renderItem={renderItem}
-      onEndReached={handleEndReached}
-      onEndReachedThreshold={0.1}
     />
   );
 };
