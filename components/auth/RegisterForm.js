@@ -5,13 +5,16 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  StyleSheet
 } from 'react-native';
 import axios from 'axios';
 import React, {useState} from 'react';
 import {setItem} from '../../utils/Storage';
 import {BASE_URL} from '../../utils/Constants';
+import {useTheme} from '../../utils/ThemeContext';
 
 export const RegisterForm = ({navigation}) => {
+  const {theme, toggleTheme} = useTheme();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -49,104 +52,133 @@ export const RegisterForm = ({navigation}) => {
     navigation.dispatch(StackActions.push('MainContent'));
   };
 
+  const backgroundImage =
+    theme === 'dark'
+      ? require('../../assets/background/ff.png')
+      : require('../../assets/background/ffw.png');
+
+  const styles = StyleSheet.create({
+    titleText :{
+      fontFamily: 'Roboto-Medium',
+            fontSize: 28,
+            fontWeight: '500',
+            color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
+            marginBottom: 15,
+            textAlign: 'center',
+            textShadowColor: theme === 'dark' ? '#ffffff' : '#000',
+            textShadowOffset: {width: 4, height: 4},
+            textShadowRadius: 100,
+    },
+    textInput :{
+      borderWidth: 1,
+      flex: 1,
+      margin: 5,
+      padding: 5,
+            borderColor: theme === 'dark' ? '#ffffff' : '#000000',
+
+              fontSize: 16,
+              fontFamily: 'Roboto-Medium',
+              color: theme === 'dark' ? '#ffffff' : '#2a2a2a'
+            
+    },
+    
+    passwordInput :{
+      borderWidth: 1,
+      padding: 5,
+      marginTop: 5,
+      margin: 5,
+      borderColor: theme === 'dark' ? '#ffffff' : '#000000',
+
+              fontSize: 16,
+              fontFamily: 'Roboto-Medium',
+              color: theme === 'dark' ? '#ffffff' : '#2a2a2a'
+    },
+
+    button:{
+      backgroundColor: theme === 'dark' ? '#ffffff' : '#000000',
+            padding: 15,
+            borderRadius: 10,
+            marginBottom: 20,
+            marginTop: 10,
+            text : {
+            textAlign: 'center',
+              fontWeight: '700',
+              fontSize: 18,
+              color: theme === 'dark' ? '#000000' : '#ffffff',
+    }}
+    
+
+  })
+
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
       <View style={{paddingHorizontal: 50}}>
         <View style={{alignItems: 'center'}}>
           <ImageBackground
-            source={require('../../assets/background/body2.png')}
-            style={{height: 400, width: 500}}
+            source={backgroundImage}
+            style={{height: 300, width: 400}}
           />
         </View>
 
         <Text
-          style={{
-            fontFamily: 'Roboto-Medium',
-            fontSize: 28,
-            fontWeight: '500',
-            color: '#333',
-            marginBottom: 15,
-            textAlign: 'center',
-            textShadowColor: '#f06129',
-            textShadowOffset: {width: 4, height: 4},
-            textShadowRadius: 100,
-          }}>
+          style={styles.titleText}>
           Register
         </Text>
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <TextInput
             placeholder={'Username'}
+            placeholderTextColor={theme === 'dark' ? '#A1A1A1' : '2a2a2a'}
             onChangeText={handleUsernameChange}
             value={username}
-            style={{
-              flex: 1,
-              margin: 5,
-              padding: 5,
-              borderWidth: 1,
-              borderColor: '#f06129',
-            }}
+            style={styles.textInput}
           />
 
-          <TextInput
+<TextInput
             placeholder={'E-mail'}
+            placeholderTextColor={theme === 'dark' ? '#A1A1A1' : '2a2a2a'}
             onChangeText={handleEmailChange}
             value={email}
-            style={{
-              flex: 1,
-              margin: 5,
-              padding: 5,
-              borderWidth: 1,
-              borderColor: '#f06129',
-            }}
+            style={styles.textInput}
           />
+
         </View>
 
         <TextInput
           placeholder={'Password'}
+          placeholderTextColor={theme === 'dark' ? '#A1A1A1' : '2a2a2a'}
           secureTextEntry={true}
           onChangeText={handlePasswordChange}
           value={password}
-          style={{
-            borderWidth: 1,
-            padding: 5,
-            marginTop: 5,
-            margin: 5,
-            borderColor: '#f06129',
-          }}
+          style={styles.passwordInput}
         />
 
         <TouchableOpacity
-          style={{
-            backgroundColor: '#f06129',
-            padding: 15,
-            borderRadius: 10,
-            marginBottom: 20,
-            marginTop: 10,
-          }}
+          style={styles.button}
           onPress={register}>
           <Text
-            style={{
-              textAlign: 'center',
-              fontWeight: '700',
-              fontSize: 18,
-              color: '#fff',
-            }}>
+            style={styles.button.text}>
             REGISTER
           </Text>
         </TouchableOpacity>
+
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
-            marginBottom: 30,
+            marginBottom: 5,
           }}>
-          <Text>Already have an account ?</Text>
+          <Text style={{color: theme === 'dark' ? '#ffffff' : '2a2a2a'}}>Already have an account ?</Text>
+          </View>
+          <View style={{alignSelf: 'center'}}>
+          <Text style={{color: theme === 'dark' ? '#ffffff' : '2a2a2a', fontWeight: 'bold'}}>_____________________________________________</Text>
+        </View>
+          <View style={{alignSelf: 'center', marginTop: 10}}>
           <TouchableOpacity
             onPress={() =>
               navigation.dispatch(StackActions.push('LoginScreen'))
             }>
-            <Text style={{color: '#f06129', fontWeight: '700'}}> Sign in</Text>
+            <Text style={{color: theme === 'dark' ? '#ffffff' : '#000000', fontWeight: 'bold', fontSize: 24}}> Sign in</Text>
           </TouchableOpacity>
         </View>
       </View>

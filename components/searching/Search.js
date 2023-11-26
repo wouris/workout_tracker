@@ -14,17 +14,15 @@ import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import {BASE_URL} from '../../utils/Constants';
 import axios from 'axios';
 import {getItem, setItem} from '../../utils/Storage';
+import {useTheme} from '../../utils/ThemeContext';
+import FastImage from 'react-native-fast-image';
 
 library.add(faSearch);
 
 export const Search = ({navigation}) => {
+  const {theme, toggleTheme} = useTheme();
   const [searchText, setSearchText] = useState('');
-  const [data, setData] = useState([
-    {id: 1, name: 'Item 1'},
-    {id: 2, name: 'Item 2'},
-    {id: 3, name: 'Item 3'},
-    {id: 4, name: 'Item 4'},
-  ]);
+  const [data, setData] = useState([]);
   useEffect(() => {
     const noa = async () => {
       const options = {
@@ -51,6 +49,7 @@ export const Search = ({navigation}) => {
 
   const [filteredData, setFilteredData] = useState(data);
 
+
   const styles = StyleSheet.create({
     searchBox: {
       alignItems: 'center',
@@ -60,45 +59,57 @@ export const Search = ({navigation}) => {
       backgroundColor: 'white',
       display: 'flex',
       flexDirection: 'row',
-      borderWidth: 1,
-      borderColor: '#ff6347',
+      borderWidth: 2,
+      borderColor: theme === 'dark' ? '#ffffff' : '#000000',
       borderRadius: 20,
+      backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff',
+      text: {
+        fontSize: 16,
+        fontFamily: 'Roboto-Medium',
+        color: theme === 'dark' ? '#ffffff' : '#2a2a2a'
+      },
     },
     modal: {
       display: 'flex',
       margin: 50,
-      backgroundColor: 'white',
+      backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff',
       height: 'fit-content',
       width: '100%',
       borderRadius: 12,
       text: {
         fontSize: 16,
         fontFamily: 'Roboto-Medium',
-        color: '#696969',
+        color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
+        width: '100%',
+        fontWeight: 'bold'
       },
     },
     items: {
       display: 'flex',
       margin: 20,
-      backgroundColor: 'lightgrey',
+      backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff',
       height: 'fit-content',
       width: '100%',
       borderRadius: 2,
       text: {
         fontSize: 16,
         fontFamily: 'Roboto-Medium',
-        color: '#696969',
+        color: 'white',
+        fontWeight: 'bold'
       },
     },
   });
 
   const handleSearch = text => {
-    setSearchText(text);
-    const filtered = data.filter(item =>
-      item.name.toLowerCase().includes(text.toLowerCase()),
+  setSearchText(text);
+
+  if (data) {
+    const filtered = data.filter(
+      item => item.username && item.username.toLowerCase().includes(text.toLowerCase())
     );
     setFilteredData(filtered);
-  };
+  }
+};
 
   return (
     <View style={{alignItems: 'center', margin: 10}}>
@@ -106,16 +117,13 @@ export const Search = ({navigation}) => {
         <FontAwesomeIcon
           icon={'search'}
           size={20}
-          color={'tomato'}
+          color={theme === 'dark' ? '#ffffff' : '#000000'}
           style={{marginLeft: 15, marginRight: 5}}
         />
         <TextInput
           placeholder={'Search'}
-          style={{
-            fontSize: 16,
-            fontFamily: 'Roboto-Medium',
-            width: '100%',
-          }}
+          placeholderTextColor={theme === 'dark' ? '#A1A1A1' : '#2a2a2a'}
+          style={styles.searchBox.text}
           value={searchText}
           onChangeText={handleSearch}
         />
@@ -131,7 +139,14 @@ export const Search = ({navigation}) => {
                 // For example, you can navigate to a new screen with the item details
                 navigation.navigate('ItemDetails', {itemId: item.id});
               }}>
-              <Text style={styles.modal.text}>{item.name}</Text>
+              <View style={{flexDirection: 'row', display: 'flex'}}>
+              <FastImage
+                  source={require('../../assets/background/profile.png')}
+                  style={{width: 80, height: 80}}
+                />
+                <Text style={styles.modal.text}>{item.username}</Text>
+              </View>
+              
             </TouchableOpacity>
           )}
           keyExtractor={item => item.id.toString()}

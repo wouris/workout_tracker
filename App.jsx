@@ -73,7 +73,7 @@ function AppNavigator({navigation}) {
         tabBarLabel: ({focused}) => {
           const fontFamily = focused ? 'Roboto-Medium' : 'Roboto-Light';
           const fontSize = 10;
-          const color = focused ? 'tomato' : 'gray';
+          const color = focused ? 'white' : 'gray';
 
           return (
             <Text style={{fontFamily, fontSize, color}}>
@@ -97,7 +97,7 @@ function AppNavigator({navigation}) {
 
           return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
+        tabBarActiveTintColor: 'white',
         tabBarStyle: {
           backgroundColor: theme === 'dark' ? '#333333' : 'white', // Change to your dark theme color
         },

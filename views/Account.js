@@ -1,4 +1,4 @@
-import {Button, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Button, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Avatar from '../components/account/Avatar';
 import {useTheme} from '../utils/ThemeContext';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -9,6 +9,11 @@ import {getItem, setItem} from '../utils/Storage';
 import {useEffect, useState} from 'react';
 import {BASE_URL} from '../utils/Constants';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faMoon, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faMoon,faRightFromBracket)
 
 const Account = ({navigation, route}) => {
   const {theme, toggleTheme} = useTheme();
@@ -87,7 +92,7 @@ const Account = ({navigation, route}) => {
       borderRadius: 10,
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'center',
+      justifyContent: 'flex-end',
       // alignItems: 'center',
     },
     accountName: {
@@ -112,10 +117,18 @@ const Account = ({navigation, route}) => {
             <Avatar />
           </View>
           <View style={{display: 'flex', flexDirection: 'column'}}>
-            <Text style={styles.accountName}>{userData.username}</Text>
+            <Text style={styles.accountName}>{userData.username}
+            <TouchableOpacity onPress={logout}>
+          <FontAwesomeIcon icon={'right-from-bracket'}
+          color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
+          size={20}
+          style={{marginHorizontal: 15}}
+          />
+        </TouchableOpacity>
+            </Text>
             <View style={styles.followContainer}>
-              <Pressable onPress={() => showModal('Workouts')}>
-                <Text style={styles.followContainer.text}>Workouts</Text>
+              <Pressable onPress={() => showModal('Posts')}>
+                <Text style={styles.followContainer.text}>Posts</Text>
                 <Text style={styles.followContainer.value}>
                   {userData.workouts}
                 </Text>
@@ -137,8 +150,12 @@ const Account = ({navigation, route}) => {
         </View>
       </View>
       <View style={styles.container}>
-        <Button title="Toggle Theme" onPress={toggleTheme} />
-        <Button title="Logout" onPress={logout} />
+        <TouchableOpacity onPress={toggleTheme}>
+          <FontAwesomeIcon icon={'moon'}
+          color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
+          size={40}
+          style={{marginHorizontal: 20}} />
+          </TouchableOpacity>
       </View>
     </View>
   );
