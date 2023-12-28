@@ -73,14 +73,13 @@ function AppNavigator({navigation}) {
         tabBarLabel: ({focused}) => {
           const fontFamily = focused ? 'Roboto-Medium' : 'Roboto-Light';
           const fontSize = 10;
-          const color = focused ? 'white' : 'gray';
+          const color = focused
+            ? theme === 'dark'
+              ? 'white'
+              : 'black'
+            : 'grey';
 
-          return (
-            <Text style={{fontFamily, fontSize, color}}>
-              {/* Display the tab label text */}
-              {route.name}
-            </Text>
-          );
+          return null;
         },
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
@@ -95,9 +94,9 @@ function AppNavigator({navigation}) {
             iconName = 'circle-user';
           }
 
-          return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
+          return <FontAwesomeIcon icon={iconName} size={28} color={color} />;
         },
-        tabBarActiveTintColor: 'white',
+        tabBarActiveTintColor: theme === 'dark' ? 'white' : 'black',
         tabBarStyle: {
           backgroundColor: theme === 'dark' ? '#333333' : 'white', // Change to your dark theme color
         },

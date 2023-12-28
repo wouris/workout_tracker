@@ -1,4 +1,11 @@
-import {Button, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Button,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Avatar from '../components/account/Avatar';
 import {useTheme} from '../utils/ThemeContext';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -9,11 +16,16 @@ import {getItem, setItem} from '../utils/Storage';
 import {useEffect, useState} from 'react';
 import {BASE_URL} from '../utils/Constants';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faMoon, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {
+  faMoon,
+  faPersonBiking,
+  faRightFromBracket,
+  faTableCells,
+} from '@fortawesome/free-solid-svg-icons';
 
-library.add(faMoon,faRightFromBracket)
+library.add(faMoon, faRightFromBracket, faTableCells, faPersonBiking);
 
 const Account = ({navigation, route}) => {
   const {theme, toggleTheme} = useTheme();
@@ -67,7 +79,7 @@ const Account = ({navigation, route}) => {
       gap: 10,
       text: {
         fontSize: 12,
-        fontFamily: 'Roboto-Medium',
+        fontFamily: 'monospace',
         color: theme === 'dark' ? '#c5c5c5' : '#696969',
       },
       value: {
@@ -85,21 +97,43 @@ const Account = ({navigation, route}) => {
       flex: 1,
     },
     container: {
-      margin: 10,
+      margin: 12,
       padding: 12,
       backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff',
       color: theme === 'dark' ? '#ffffff' : '#000000',
       borderRadius: 10,
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
       // alignItems: 'center',
+    },
+    postContainer: {
+      buttons: {
+        margin: 20,
+        padding: 30,
+        backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff',
+        color: theme === 'dark' ? '#ffffff' : '#000000',
+        borderRadius: 10,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        flex: 1,
+        alignItems: 'center',
+        gap: 10,
+      },
     },
     accountName: {
       fontSize: 20,
       fontFamily: 'Roboto-Medium',
       margin: 10,
       color: theme === 'dark' ? '#ffffff' : '#000000',
+    },
+    yourPosts: {
+      text: {
+        fontSize: 20,
+        fontFamily: 'monospace',
+        color: theme === 'dark' ? '#c5c5c5' : '#696969',
+      },
     },
   });
 
@@ -117,14 +151,16 @@ const Account = ({navigation, route}) => {
             <Avatar />
           </View>
           <View style={{display: 'flex', flexDirection: 'column'}}>
-            <Text style={styles.accountName}>{userData.username}
-            <TouchableOpacity onPress={logout}>
-          <FontAwesomeIcon icon={'right-from-bracket'}
-          color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
-          size={20}
-          style={{marginHorizontal: 15}}
-          />
-        </TouchableOpacity>
+            <Text style={styles.accountName}>
+              {userData.username}
+              <TouchableOpacity onPress={logout}>
+                <FontAwesomeIcon
+                  icon={'right-from-bracket'}
+                  color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
+                  size={20}
+                  style={{marginHorizontal: 15}}
+                />
+              </TouchableOpacity>
             </Text>
             <View style={styles.followContainer}>
               <Pressable onPress={() => showModal('Posts')}>
@@ -149,13 +185,46 @@ const Account = ({navigation, route}) => {
           </View>
         </View>
       </View>
-      <View style={styles.container}>
-        <TouchableOpacity onPress={toggleTheme}>
-          <FontAwesomeIcon icon={'moon'}
+      <TouchableOpacity onPress={toggleTheme}>
+        <FontAwesomeIcon
+          icon={'moon'}
           color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
           size={40}
-          style={{marginHorizontal: 20}} />
-          </TouchableOpacity>
+          style={{marginHorizontal: 20}}
+        />
+      </TouchableOpacity>
+
+      <View style={styles.postContainer.buttons}>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          onPress={() => showModal('Posts')}>
+          <FontAwesomeIcon
+            icon={'table-cells'}
+            color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
+            size={30}
+            style={{marginHorizontal: 20}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          onPress={() => showModal('Routines')}>
+          <FontAwesomeIcon
+            icon={'person-biking'}
+            color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
+            size={30}
+            style={{marginHorizontal: 20}}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );

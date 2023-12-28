@@ -2,7 +2,6 @@ import {Text, View} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
 import React from 'react';
 import {Exercise} from '../../models/Exercise';
-import {GifControllerView} from 'react-native-gif-controller-view';
 import {ExerciseGroup} from '../../models/ExerciseGroup';
 
 const ExerciseView = ({data: {exercises}}: {data: ExerciseGroup}) => {

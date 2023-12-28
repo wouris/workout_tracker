@@ -1,4 +1,11 @@
-import {Text, View, StyleSheet, TouchableOpacity, ImageBackground, Image} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+  Image,
+} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 
 export const ExerciseMenu = ({navigation}) => {
@@ -8,9 +15,7 @@ export const ExerciseMenu = ({navigation}) => {
       backgroundColor: 'transparent',
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: 1,
       flex: 1,
-      borderRadius: 10,
       margin: 5,
       borderWidth: 2,
       borderColor: 'white',
@@ -35,27 +40,32 @@ export const ExerciseMenu = ({navigation}) => {
         paddingLeft: 15,
         paddingRight: 15,
       }}>
-    
-      
-      <View style={{ position: 'absolute', top: 80, width: '100%', alignItems: 'center', margin: 20 }}>
+      <View
+        style={{
+          position: 'absolute',
+          top: 80,
+          width: '100%',
+          alignItems: 'center',
+          margin: 20,
+        }}>
         <Image
           source={require('../../assets/background/fitfusionW.png')}
-          style={{ width: 400, height: 200}}
+          style={{width: 400, height: 200}}
         />
       </View>
 
-      
-        <TouchableOpacity
-          style={styles.box}
-          onPress={() => navigation.dispatch(StackActions.push('ExerciseScreen'))}>
-          <Text style={styles.font}>EXERCISES</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.box}
-          onPress={() => navigation.dispatch(StackActions.push('RoutineScreen'))}>
-          <Text style={styles.font}>ROUTINES</Text>
-        </TouchableOpacity>
-      
+      <TouchableOpacity
+        style={styles.box}
+        onPress={() =>
+          navigation.dispatch(StackActions.push('ExerciseScreen'))
+        }>
+        <Text style={styles.font}>EXERCISES</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.box}
+        onPress={() => navigation.dispatch(StackActions.push('RoutineScreen'))}>
+        <Text style={styles.font}>ROUTINES</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 };
