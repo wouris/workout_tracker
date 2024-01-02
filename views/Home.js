@@ -1,9 +1,9 @@
-import {Text, View} from 'react-native';
+import HomePage from '../components/home/HomePage';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Home!</Text>
-    </View>
+    <>
+      <HomePage navigation={navigation} />
+    </>
   );
 }

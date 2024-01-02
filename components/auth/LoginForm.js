@@ -51,7 +51,7 @@ export const LoginForm = ({navigation}) => {
     theme === 'dark'
       ? require('../../assets/background/ff.png')
       : require('../../assets/background/ffw.png');
-  
+
 
   const styles = StyleSheet.create({
     titleText :{
@@ -75,8 +75,8 @@ export const LoginForm = ({navigation}) => {
               fontSize: 16,
               fontFamily: 'Roboto-Medium',
               color: theme === 'dark' ? '#ffffff' : '#2a2a2a'
-            
-    },  
+
+    },
     button:{
       backgroundColor: theme === 'dark' ? '#ffffff' : '#000000',
             padding: 15,
@@ -89,7 +89,7 @@ export const LoginForm = ({navigation}) => {
               fontSize: 18,
               color: theme === 'dark' ? '#000' : '#fff',
     }}
-    
+
 
   })
 
@@ -110,7 +110,7 @@ export const LoginForm = ({navigation}) => {
 
         <TextInput
           placeholder={'Username'}
-          placeholderTextColor={theme === 'dark' ? '#A1A1A1' : '2a2a2a'}
+          placeholderTextColor={theme === 'dark' ? '#A1A1A1' : '#2a2a2a'}
           onChangeText={handleUsernameChange}
           value={username}
           style={styles.textInput}
