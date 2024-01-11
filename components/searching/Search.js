@@ -16,6 +16,7 @@ import axios from 'axios';
 import {getItem, setItem} from '../../utils/Storage';
 import {useTheme} from '../../utils/ThemeContext';
 import FastImage from 'react-native-fast-image';
+import Avatar from '../account/Avatar';
 
 library.add(faSearch);
 
@@ -49,14 +50,12 @@ export const Search = ({navigation}) => {
 
   const [filteredData, setFilteredData] = useState(data);
 
-
   const styles = StyleSheet.create({
     searchBox: {
       alignItems: 'center',
       width: '100%',
       margin: 10,
       height: 40,
-      backgroundColor: 'white',
       display: 'flex',
       flexDirection: 'row',
       borderWidth: 2,
@@ -66,11 +65,12 @@ export const Search = ({navigation}) => {
       text: {
         fontSize: 16,
         fontFamily: 'Roboto-Medium',
-        color: theme === 'dark' ? '#ffffff' : '#2a2a2a'
+        color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
       },
     },
     modal: {
       display: 'flex',
+      alignItems: 'center',
       margin: 50,
       backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff',
       height: 'fit-content',
@@ -78,38 +78,38 @@ export const Search = ({navigation}) => {
       borderRadius: 12,
       text: {
         fontSize: 16,
-        fontFamily: 'Roboto-Medium',
+        fontFamily: 'monospace',
         color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
         width: '100%',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
       },
     },
     items: {
-      display: 'flex',
       margin: 20,
       backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff',
       height: 'fit-content',
       width: '100%',
-      borderRadius: 2,
       text: {
         fontSize: 16,
         fontFamily: 'Roboto-Medium',
         color: 'white',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
       },
     },
   });
 
   const handleSearch = text => {
-  setSearchText(text);
+    setSearchText(text);
 
-  if (data) {
-    const filtered = data.filter(
-      item => item.username && item.username.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredData(filtered);
-  }
-};
+    if (data) {
+      const filtered = data.filter(
+        item =>
+          item.username &&
+          item.username.toLowerCase().includes(text.toLowerCase()),
+      );
+      setFilteredData(filtered);
+    }
+  };
 
   return (
     <View style={{alignItems: 'center', margin: 10}}>
@@ -139,14 +139,10 @@ export const Search = ({navigation}) => {
                 // For example, you can navigate to a new screen with the item details
                 navigation.navigate('ItemDetails', {itemId: item.id});
               }}>
-              <View style={{flexDirection: 'row', display: 'flex'}}>
-              <FastImage
-                  source={require('../../assets/background/profile.png')}
-                  style={{width: 80, height: 80}}
-                />
+              <View style={{flexDirection: 'row', gap: 10, alignItems:'center'}}>
+                <Avatar avatar={item.avatar} />
                 <Text style={styles.modal.text}>{item.username}</Text>
               </View>
-              
             </TouchableOpacity>
           )}
           keyExtractor={item => item.id.toString()}

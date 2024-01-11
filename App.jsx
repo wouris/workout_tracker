@@ -27,10 +27,12 @@ import {
   faMagnifyingGlass,
   faPersonWalking,
   faRocket,
+  faSquarePlus,
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ExerciseMenuView from './views/ExerciseMenuView';
 import SearchScreen from './views/SearchView';
+import AddPostScreen from './views/PostAdding';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -88,6 +90,8 @@ function AppNavigator({navigation}) {
             iconName = 'rocket';
           } else if (route.name === 'Search') {
             iconName = 'magnifying-glass';
+          } else if (route.name === 'New post') {
+            iconName = 'square-plus';
           } else if (route.name === 'Workout') {
             iconName = 'dumbbell';
           } else if (route.name === 'Account') {
@@ -103,6 +107,7 @@ function AppNavigator({navigation}) {
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="New post" component={AddPostScreen} />
       <Tab.Screen name="Workout" component={ExerciseMenuView} />
       <Tab.Screen name="Account" component={AccountStack} />
     </Tab.Navigator>
@@ -123,11 +128,11 @@ export default function App() {
 
   library.add(
     faDumbbell,
-    faPersonWalking,
     faArrowsSpin,
     faRocket,
     faCircleUser,
     faMagnifyingGlass,
+    faSquarePlus,
   );
 
   return (

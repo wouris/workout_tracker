@@ -21,10 +21,19 @@ import {
   faMoon,
   faPersonBiking,
   faRightFromBracket,
+  faSquarePlus,
+  faSun,
   faTableCells,
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faMoon, faRightFromBracket, faTableCells, faPersonBiking);
+library.add(
+  faMoon,
+  faSun,
+  faRightFromBracket,
+  faTableCells,
+  faPersonBiking,
+  faSquarePlus,
+);
 
 const Account = ({navigation, route}) => {
   const {theme, toggleTheme} = useTheme();
@@ -108,7 +117,7 @@ const Account = ({navigation, route}) => {
     },
     postContainer: {
       buttons: {
-        margin: 20,
+        margin: 12,
         padding: 30,
         backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff',
         color: theme === 'dark' ? '#ffffff' : '#000000',
@@ -134,6 +143,37 @@ const Account = ({navigation, route}) => {
         color: theme === 'dark' ? '#c5c5c5' : '#696969',
       },
     },
+    buttonContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      gap: 10,
+    },
+    items: {
+      margin: 12,
+      backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff',
+      height: 'fit-content',
+      width: '100%',
+      padding: 5,
+      color: theme === 'dark' ? '#ffffff' : '#000000',
+      borderRadius: 10,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      flex: 1,
+      alignItems: 'center',
+      gap: 10,
+      text: {
+        fontSize: 16,
+        fontFamily: 'Roboto-Medium',
+        color: 'white',
+        fontWeight: 'bold',
+      },
+    },
+    themeColor: {
+      color: theme === 'dark' ? '#ffffff' : '#000000',
+    },
   });
 
   return (
@@ -147,7 +187,7 @@ const Account = ({navigation, route}) => {
         }}>
         <View style={styles.accountContainer}>
           <View style={styles.avatarContainer}>
-            <Avatar />
+            <Avatar avatar={userData.avatar} />
           </View>
           <View style={{display: 'flex', flexDirection: 'column'}}>
             <Text style={styles.accountName}>
@@ -184,14 +224,26 @@ const Account = ({navigation, route}) => {
           </View>
         </View>
       </View>
-      <TouchableOpacity onPress={toggleTheme}>
-        <FontAwesomeIcon
-          icon={'moon'}
-          color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
-          size={40}
-          style={{marginHorizontal: 20}}
-        />
-      </TouchableOpacity>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={toggleTheme} style={styles.items}>
+          <FontAwesomeIcon
+            icon={'sun'}
+            color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
+            size={22}
+            style={{marginHorizontal: 5}}
+          />
+          <Text style={styles.themeColor}>
+            {theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          </Text>
+          <FontAwesomeIcon
+            icon={'moon'}
+            color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
+            size={22}
+            style={{marginHorizontal: 5}}
+          />
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.postContainer.buttons}>
         <TouchableOpacity
