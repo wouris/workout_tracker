@@ -6,6 +6,7 @@ import {BASE_URL} from '../../utils/Constants';
 import {getItem} from '../../utils/Storage';
 import axios from 'axios';
 
+
 export const AddPost = ({navigation}) => {
   const [image, setImage] = useState(null);
   const ImgaePicker = () => {
@@ -16,8 +17,6 @@ export const AddPost = ({navigation}) => {
       },
     );
   };
-
-  const toBase64 = image => {};
   const upload = async () => {
     const options = {
       method: 'POST',

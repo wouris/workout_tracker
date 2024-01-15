@@ -1,4 +1,5 @@
 import {
+  ImageBackground,
   Pressable,
   StyleSheet,
   Text,
@@ -12,7 +13,7 @@ import AccountModal from '../components/account/AccountModal';
 import {StackActions} from '@react-navigation/native';
 import Header from '../components/header/Header';
 import {getItem, setItem} from '../utils/Storage';
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BASE_URL} from '../utils/Constants';
 import axios from 'axios';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -25,6 +26,7 @@ import {
   faSun,
   faTableCells,
 } from '@fortawesome/free-solid-svg-icons';
+import FastImage from 'react-native-fast-image';
 
 library.add(
   faMoon,
@@ -35,10 +37,38 @@ library.add(
   faSquarePlus,
 );
 
+const PAGE_SIZE = 3;
 const Account = ({navigation, route}) => {
   const {theme, toggleTheme} = useTheme();
   const {navigateToAccountModal} = route.params || {};
   const [userData, setUserData] = useState({});
+  const [posts, setPosts] = useState([]);
+  const [button, setButton] = useState('Posts');
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const user_id = await getItem('USER_ID');
+        const response = await axios.get(
+          BASE_URL + '/api/social/post/get/' + user_id,
+          {
+            headers: {
+              Authorization: await getItem('Authorization'),
+              USER_ID: user_id,
+            },
+          },
+        );
+
+        console.log(response.data);
+
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+
+    loadPosts();
+  }, []);
 
   const showModal = type => {
     navigation.dispatch(StackActions.push('AccountModal', {type}));
@@ -69,6 +99,23 @@ const Account = ({navigation, route}) => {
     await setItem('USER_ID', null);
     await setItem('ROLE', null);
     navigation.dispatch(StackActions.push('LoginScreen'));
+  };
+
+  const renderPostsView = () => (
+    <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+      {posts.map(post => (
+        <View key={post.id} style={{width: '33.33%'}}>
+          <FastImage
+            source={{uri: `data:image/png;base64,${post.image}`}}
+            style={{width: '100%', height: 100}}
+          />
+        </View>
+      ))}
+    </View>
+  );
+
+  const handleButtonPress = () => {
+    setButton(prevButton => (prevButton === 'Posts' ? 'Grid' : 'Posts'));
   };
 
   const styles = StyleSheet.create({
@@ -253,7 +300,7 @@ const Account = ({navigation, route}) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-          onPress={() => showModal('Posts')}>
+          onPress={() => setButton('Posts')}>
           <FontAwesomeIcon
             icon={'table-cells'}
             color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
@@ -268,7 +315,7 @@ const Account = ({navigation, route}) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-          onPress={() => showModal('Routines')}>
+          onPress={() => setButton('Routines')}>
           <FontAwesomeIcon
             icon={'person-biking'}
             color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
@@ -277,6 +324,26 @@ const Account = ({navigation, route}) => {
           />
         </TouchableOpacity>
       </View>
+
+      {button === 'Posts' ? (
+        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          {posts.map(post => (
+            <View key={post.id} style={{width: '33.33%'}}>
+              <FastImage
+                source={{uri: `data:image/png;base64,${post.image}`}}
+                style={{width: '100%', height: 100}}
+              />
+            </View>
+          ))}
+        </View>
+      ) : (
+        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          <Text>
+            cau haoj
+          </Text>
+
+        </View>
+      )}
     </View>
   );
 };

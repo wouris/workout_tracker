@@ -4,7 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import React, {useState} from 'react';
 import {BASE_URL} from '../../utils/Constants';
@@ -52,46 +52,43 @@ export const LoginForm = ({navigation}) => {
       ? require('../../assets/background/ff.png')
       : require('../../assets/background/ffw.png');
 
-
   const styles = StyleSheet.create({
-    titleText :{
+    titleText: {
       fontFamily: 'Roboto-Medium',
-            fontSize: 28,
-            fontWeight: '500',
-            color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
-            marginBottom: 15,
-            textAlign: 'center',
-            textShadowColor: theme === 'dark' ? '#ffffff' : '#000',
-            textShadowOffset: {width: 4, height: 4},
-            textShadowRadius: 100,
+      fontSize: 28,
+      fontWeight: '500',
+      color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
+      marginBottom: 15,
+      textAlign: 'center',
+      textShadowColor: theme === 'dark' ? '#ffffff' : '#000',
+      textShadowOffset: {width: 4, height: 4},
+      textShadowRadius: 100,
     },
-    textInput :{
+    textInput: {
       borderWidth: 1,
-            padding: 5,
-            marginTop: 5,
-            margin: 5,
-            borderColor: theme === 'dark' ? '#ffffff' : '#000000',
+      padding: 5,
+      marginTop: 5,
+      margin: 5,
+      borderColor: theme === 'dark' ? '#ffffff' : '#000000',
 
-              fontSize: 16,
-              fontFamily: 'Roboto-Medium',
-              color: theme === 'dark' ? '#ffffff' : '#2a2a2a'
-
+      fontSize: 16,
+      fontFamily: 'Roboto-Medium',
+      color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
     },
-    button:{
+    button: {
       backgroundColor: theme === 'dark' ? '#ffffff' : '#000000',
-            padding: 15,
-            borderRadius: 10,
-            marginBottom: 20,
-            marginTop: 10,
-            text : {
-            textAlign: 'center',
-              fontWeight: '700',
-              fontSize: 18,
-              color: theme === 'dark' ? '#000' : '#fff',
-    }}
-
-
-  })
+      padding: 15,
+      borderRadius: 10,
+      marginBottom: 20,
+      marginTop: 10,
+      text: {
+        textAlign: 'center',
+        fontWeight: '700',
+        fontSize: 18,
+        color: theme === 'dark' ? '#000' : '#fff',
+      },
+    },
+  });
 
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
@@ -103,10 +100,7 @@ export const LoginForm = ({navigation}) => {
           />
         </View>
 
-        <Text
-          style={styles.titleText}>
-          Sign in
-        </Text>
+        <Text style={styles.titleText}>Sign in</Text>
 
         <TextInput
           placeholder={'Username'}
@@ -125,13 +119,8 @@ export const LoginForm = ({navigation}) => {
           style={styles.textInput}
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={login}>
-          <Text
-            style={styles.button.text}>
-            LOGIN
-          </Text>
+        <TouchableOpacity style={styles.button} onPress={login}>
+          <Text style={styles.button.text}>LOGIN</Text>
         </TouchableOpacity>
         <View
           style={{
@@ -139,17 +128,33 @@ export const LoginForm = ({navigation}) => {
             justifyContent: 'center',
             marginBottom: 5,
           }}>
-          <Text style={{color: theme === 'dark' ? '#ffffff' : '2a2a2a'}}>Don't have an account ?</Text>
+          <Text style={{color: theme === 'dark' ? '#ffffff' : '2a2a2a'}}>
+            Don't have an account ?
+          </Text>
         </View>
         <View style={{alignSelf: 'center'}}>
-          <Text style={{color: theme === 'dark' ? '#ffffff' : '2a2a2a', fontWeight: 'bold'}}>_____________________________________________</Text>
+          <Text
+            style={{
+              color: theme === 'dark' ? '#ffffff' : '2a2a2a',
+              fontWeight: 'bold',
+            }}>
+            _____________________________________________
+          </Text>
         </View>
         <View style={{alignSelf: 'center', marginTop: 5}}>
           <TouchableOpacity
             onPress={() =>
               navigation.dispatch(StackActions.push('RegisterScreen'))
             }>
-            <Text style={{color: theme === 'dark' ? '#ffffff' : '#000000', fontWeight: 'bold', fontSize: 24}}> Register</Text>
+            <Text
+              style={{
+                color: theme === 'dark' ? '#ffffff' : '#000000',
+                fontWeight: 'bold',
+                fontSize: 24,
+              }}>
+              {' '}
+              Register
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
