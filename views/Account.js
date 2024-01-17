@@ -221,6 +221,13 @@ const Account = ({navigation, route}) => {
     themeColor: {
       color: theme === 'dark' ? '#ffffff' : '#000000',
     },
+    grid: {
+      marginHorizontal: 12,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
   });
 
   return (
@@ -249,10 +256,10 @@ const Account = ({navigation, route}) => {
               </TouchableOpacity>
             </Text>
             <View style={styles.followContainer}>
-              <Pressable onPress={() => showModal('Posts')}>
+              <Pressable>
                 <Text style={styles.followContainer.text}>Posts</Text>
                 <Text style={styles.followContainer.value}>
-                  {userData.workouts}
+                  {userData.posts}
                 </Text>
               </Pressable>
               <Pressable onPress={() => showModal('Followers')}>
@@ -326,7 +333,7 @@ const Account = ({navigation, route}) => {
       </View>
 
       {button === 'Posts' ? (
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        <View style={styles.grid}>
           {posts.map(post => (
             <View key={post.id} style={{width: '33.33%'}}>
               <FastImage
@@ -338,10 +345,7 @@ const Account = ({navigation, route}) => {
         </View>
       ) : (
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-          <Text>
-            cau haoj
-          </Text>
-
+          <Text>cau haoj</Text>
         </View>
       )}
     </View>

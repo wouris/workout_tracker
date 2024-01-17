@@ -5,7 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import axios from 'axios';
 import React, {useState} from 'react';
@@ -58,57 +58,55 @@ export const RegisterForm = ({navigation}) => {
       : require('../../assets/background/ffw.png');
 
   const styles = StyleSheet.create({
-    titleText :{
+    titleText: {
       fontFamily: 'Roboto-Medium',
-            fontSize: 28,
-            fontWeight: '500',
-            color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
-            marginBottom: 15,
-            textAlign: 'center',
-            textShadowColor: theme === 'dark' ? '#ffffff' : '#000',
-            textShadowOffset: {width: 4, height: 4},
-            textShadowRadius: 100,
+      fontSize: 28,
+      fontWeight: '500',
+      color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
+      marginBottom: 15,
+      textAlign: 'center',
+      textShadowColor: theme === 'dark' ? '#ffffff' : '#000',
+      textShadowOffset: {width: 4, height: 4},
+      textShadowRadius: 100,
     },
-    textInput :{
+    textInput: {
       borderWidth: 1,
       flex: 1,
       margin: 5,
       padding: 5,
-            borderColor: theme === 'dark' ? '#ffffff' : '#000000',
+      borderColor: theme === 'dark' ? '#ffffff' : '#000000',
 
-              fontSize: 16,
-              fontFamily: 'Roboto-Medium',
-              color: theme === 'dark' ? '#ffffff' : '#2a2a2a'
-            
+      fontSize: 16,
+      fontFamily: 'Roboto-Medium',
+      color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
     },
-    
-    passwordInput :{
+
+    passwordInput: {
       borderWidth: 1,
       padding: 5,
       marginTop: 5,
       margin: 5,
       borderColor: theme === 'dark' ? '#ffffff' : '#000000',
 
-              fontSize: 16,
-              fontFamily: 'Roboto-Medium',
-              color: theme === 'dark' ? '#ffffff' : '#2a2a2a'
+      fontSize: 16,
+      fontFamily: 'Roboto-Medium',
+      color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
     },
 
-    button:{
+    button: {
       backgroundColor: theme === 'dark' ? '#ffffff' : '#000000',
-            padding: 15,
-            borderRadius: 10,
-            marginBottom: 20,
-            marginTop: 10,
-            text : {
-            textAlign: 'center',
-              fontWeight: '700',
-              fontSize: 18,
-              color: theme === 'dark' ? '#000000' : '#ffffff',
-    }}
-    
-
-  })
+      padding: 15,
+      borderRadius: 10,
+      marginBottom: 20,
+      marginTop: 10,
+      text: {
+        textAlign: 'center',
+        fontWeight: '700',
+        fontSize: 18,
+        color: theme === 'dark' ? '#000000' : '#ffffff',
+      },
+    },
+  });
 
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
@@ -120,10 +118,7 @@ export const RegisterForm = ({navigation}) => {
           />
         </View>
 
-        <Text
-          style={styles.titleText}>
-          Register
-        </Text>
+        <Text style={styles.titleText}>Register</Text>
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <TextInput
@@ -134,14 +129,13 @@ export const RegisterForm = ({navigation}) => {
             style={styles.textInput}
           />
 
-<TextInput
+          <TextInput
             placeholder={'E-mail'}
             placeholderTextColor={theme === 'dark' ? '#A1A1A1' : '2a2a2a'}
             onChangeText={handleEmailChange}
             value={email}
             style={styles.textInput}
           />
-
         </View>
 
         <TextInput
@@ -153,13 +147,8 @@ export const RegisterForm = ({navigation}) => {
           style={styles.passwordInput}
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={register}>
-          <Text
-            style={styles.button.text}>
-            REGISTER
-          </Text>
+        <TouchableOpacity style={styles.button} onPress={register}>
+          <Text style={styles.button.text}>REGISTER</Text>
         </TouchableOpacity>
 
         <View
@@ -168,17 +157,33 @@ export const RegisterForm = ({navigation}) => {
             justifyContent: 'center',
             marginBottom: 5,
           }}>
-          <Text style={{color: theme === 'dark' ? '#ffffff' : '2a2a2a'}}>Already have an account ?</Text>
-          </View>
-          <View style={{alignSelf: 'center'}}>
-          <Text style={{color: theme === 'dark' ? '#ffffff' : '2a2a2a', fontWeight: 'bold'}}>_____________________________________________</Text>
+          <Text style={{color: theme === 'dark' ? '#ffffff' : '2a2a2a'}}>
+            Already have an account ?
+          </Text>
         </View>
-          <View style={{alignSelf: 'center', marginTop: 10}}>
+        <View style={{alignSelf: 'center'}}>
+          <Text
+            style={{
+              color: theme === 'dark' ? '#ffffff' : '2a2a2a',
+              fontWeight: 'bold',
+            }}>
+            _____________________________________________
+          </Text>
+        </View>
+        <View style={{alignSelf: 'center', marginTop: 10}}>
           <TouchableOpacity
             onPress={() =>
               navigation.dispatch(StackActions.push('LoginScreen'))
             }>
-            <Text style={{color: theme === 'dark' ? '#ffffff' : '#000000', fontWeight: 'bold', fontSize: 24}}> Sign in</Text>
+            <Text
+              style={{
+                color: theme === 'dark' ? '#ffffff' : '#000000',
+                fontWeight: 'bold',
+                fontSize: 24,
+              }}>
+              {' '}
+              Sign in
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

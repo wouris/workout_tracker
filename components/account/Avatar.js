@@ -16,7 +16,7 @@ const Avatar = ({avatar}) => {
   return (
     <View style={styles.avatarContainer}>
       <Image
-        style={{width: 70, height: 70, borderRadius: 50}}
+        style={{width: 90, height: 90, borderRadius: 50}}
         source={{uri: image}}
       />
     </View>

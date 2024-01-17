@@ -1,6 +1,11 @@
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import {library} from '@fortawesome/fontawesome-svg-core';
+
+library.add(faChevronLeft);
 
 const Header = ({title, theme, modal, route, navigation}) => {
   const styles = StyleSheet.create({
@@ -40,7 +45,12 @@ const Header = ({title, theme, modal, route, navigation}) => {
         <Pressable
           onPress={() => navigation.goBack()}
           style={styles.backButton}>
-          <Ionicons name={'chevron-back'} size={30} color={'red'} />
+          <FontAwesomeIcon
+            icon={'chevron-left'}
+            color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
+            size={22}
+            style={{marginHorizontal: 5}}
+          />
         </Pressable>
         <Text style={styles.title}>{title}</Text>
       </View>

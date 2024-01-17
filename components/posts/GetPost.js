@@ -1,13 +1,38 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {useTheme} from '../../utils/ThemeContext';
+import Avatar from '../account/Avatar';
+import {getItem} from '../../utils/Storage';
+import {BASE_URL} from '../../utils/Constants';
+import axios from 'axios';
 
 const GetPost = ({post}) => {
   const {theme} = useTheme();
   const [likes, setLikes] = useState(post.likes);
   const [heartClicked, setHeartClicked] = useState(false);
   const [commentClicked, setCommentClicked] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  useEffect(async () => {
+    const USER_ID = await getItem('USER_ID');
+    const options = {
+      method: 'GET',
+      url: BASE_URL + `/api/social/user/${USER_ID}/info`,
+      headers: {
+        Accept: 'application/json',
+        Authorization: await getItem('Authorization'),
+        USER_ID: await getItem('USER_ID'),
+      },
+    };
+
+    try {
+      const {data} = await axios.request(options);
+      setUserData(data);
+    } catch (error) {
+      console.error(error.response.data.message);
+    }
+  }, []);
   const handleHeartClick = () => {
     //implementovat na server request
     if (heartClicked) {
@@ -34,7 +59,9 @@ const GetPost = ({post}) => {
       height: 300,
     },
     cardHeader: {
-      marginTop: 10,
+      marginTop: 8,
+      marginLeft: 8,
+      marginBottom: 8,
       padding: 10,
       flexDirection: 'row',
       alignItems: 'center',
@@ -50,6 +77,7 @@ const GetPost = ({post}) => {
       borderColor: theme === 'dark' ? '#ffffff' : '#000000',
     },
     cardTitle: {
+      marginLeft: 20,
       color: theme === 'dark' ? '#ffffff' : '#000000',
     },
     cardAvatar: {
@@ -62,6 +90,14 @@ const GetPost = ({post}) => {
       borderWidth: 0.25,
       borderColor: theme === 'dark' ? '#ffffff' : '#000000',
       color: theme === 'dark' ? '#ffffff' : '#000000',
+    },
+    avatarContainer: {
+      width: 22,
+      height: 22,
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 
@@ -81,12 +117,12 @@ const GetPost = ({post}) => {
 
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        <TouchableOpacity>
+        <View style={styles.avatarContainer}>
           <Image
-            source={require('../../assets/background/profile.png')}
-            style={styles.cardAvatar}
+            style={{width: 42, height: 42, borderRadius: 50}}
+            source={{uri: `data:image/png;base64,${userData.avatar}`}}
           />
-        </TouchableOpacity>
+        </View>
         <Text style={styles.cardTitle}>{post.username}</Text>
       </View>
       <Image
@@ -128,10 +164,6 @@ const GetPost = ({post}) => {
       <View style={styles.cardContent}>
         <Text style={{color: theme === 'dark' ? '#ffffff' : '#000000'}}>
           {post.description}
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam,
-          aliquid animi commodi earum eligendi fuga fugit minus molestiae
-          necessitatibus quam qui quibusdam quidem quis saepe unde!
-          Exercitationem nam sint temporibus.
         </Text>
       </View>
     </View>
