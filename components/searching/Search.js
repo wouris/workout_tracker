@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {BASE_URL} from '../../utils/Constants';
 import axios from 'axios';
 import {getItem, setItem} from '../../utils/Storage';
@@ -18,7 +18,7 @@ import {useTheme} from '../../utils/ThemeContext';
 import FastImage from 'react-native-fast-image';
 import Avatar from '../account/Avatar';
 
-library.add(faSearch);
+library.add(faSearch, faPlus);
 
 export const Search = ({navigation}) => {
   const {theme, toggleTheme} = useTheme();
@@ -40,6 +40,7 @@ export const Search = ({navigation}) => {
         const {data} = await axios.request(options);
         console.log(data);
         setData(data);
+        setFilteredData(data);
       } catch (error) {
         console.error(error.response.data.message);
       }
@@ -77,11 +78,18 @@ export const Search = ({navigation}) => {
       width: '100%',
       borderRadius: 12,
       text: {
+        marginLeft: 12,
         fontSize: 16,
         fontFamily: 'monospace',
         color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
         width: '100%',
         fontWeight: 'bold',
+      },
+      followText: {
+        fontSize: 16,
+        fontFamily: 'monospace',
+        color: theme === 'dark' ? '#ffffff' : '#2a2a2a',
+        width: '100%',
       },
     },
     items: {
@@ -132,18 +140,30 @@ export const Search = ({navigation}) => {
         <FlatList
           data={filteredData}
           renderItem={({item}) => (
-            <TouchableOpacity
-              style={styles.items}
-              onPress={() => {
-                // Handle item press logic here
-                // For example, you can navigate to a new screen with the item details
-                navigation.navigate('ItemDetails', {itemId: item.id});
-              }}>
-              <View style={{flexDirection: 'row', gap: 10, alignItems:'center'}}>
-                <Avatar avatar={item.avatar} />
-                <Text style={styles.modal.text}>{item.username}</Text>
+            <View style={styles.items}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                {/*Add onPress to navigate to user profile*/}
+                <TouchableOpacity>
+                  <Avatar avatar={item.avatar} />
+                </TouchableOpacity>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginLeft: 10,
+                    width: '60%',
+                  }}>
+                  <Text style={styles.modal.text}>{item.username}</Text>
+                  {/*add follow button functionality*/}
+                  <TouchableOpacity>
+                    <FontAwesomeIcon
+                      icon={'plus'}
+                      size={20}
+                      color={theme === 'dark' ? '#ffffff' : '#000000'}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </TouchableOpacity>
+            </View>
           )}
           keyExtractor={item => item.id.toString()}
         />
