@@ -335,7 +335,7 @@ const Account = ({navigation, route}) => {
       {button === 'Posts' ? (
         <View style={styles.grid}>
           {posts.map(post => (
-            <View key={post.id} style={{width: '33.33%'}}>
+            <View key={post.id} style={{width: '32.00%', margin: 1}}>
               <FastImage
                 source={{uri: `data:image/png;base64,${post.image}`}}
                 style={{width: '100%', height: 100}}

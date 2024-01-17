@@ -96,7 +96,7 @@ import GetPost from '../posts/GetPost';
 
 library.add(faHeart, faComment);
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 5;
 const HomePage = ({navigation}) => {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);

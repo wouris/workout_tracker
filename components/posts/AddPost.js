@@ -4,16 +4,19 @@ import {
   View,
   Text,
   StyleSheet,
-  ImageBackground,
-} from 'react-native';
+  ImageBackground, Alert,
+} from "react-native";
 import {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {BASE_URL} from '../../utils/Constants';
 import {getItem} from '../../utils/Storage';
 import axios from 'axios';
 import {useTheme} from '../../utils/ThemeContext';
+import TextImput from "./TextImput";
+import MultilineTextInputExample from "./TextImput";
 
 export const AddPost = ({navigation}) => {
+  const [value, onChangeText] = useState('');
   const [image, setImage] = useState(null);
   const {theme, toggleTheme} = useTheme();
   const ImgaePicker = () => {
@@ -24,6 +27,7 @@ export const AddPost = ({navigation}) => {
       },
     );
   };
+
   const upload = async () => {
     const options = {
       method: 'POST',
@@ -33,7 +37,7 @@ export const AddPost = ({navigation}) => {
         Authorization: await getItem('Authorization'),
         USER_ID: await getItem('USER_ID'),
       },
-      data: {image: image, description: 'string'},
+      data: {image: image, description: value},
     };
 
     try {
@@ -42,10 +46,22 @@ export const AddPost = ({navigation}) => {
     } catch (error) {
       console.error(error);
     }
+    Alert.alert('Post was uploaded');
+    back();
   };
+
+
+  const backgroundImage =
+    theme === 'dark'
+      ? require('../../assets/background/ff2_white.png')
+      : require('../../assets/background/ff2_black.png');
 
   const back = () => {
     setImage(null);
+  };
+
+  const handleTextChange = (text) => {
+    onChangeText(text);
   };
 
   const styles = StyleSheet.create({
@@ -64,7 +80,13 @@ export const AddPost = ({navigation}) => {
         fontFamily: 'monospace',
       },
     },
+    inputContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
   });
+
+
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -79,6 +101,9 @@ export const AddPost = ({navigation}) => {
             resizeMode={FastImage.resizeMode.contain}
           />
           <View>
+            <View style={styles.inputContainer}>
+              <MultilineTextInputExample onTextChange={handleTextChange} />
+            </View>
             <TouchableOpacity style={styles.button} onPress={ImgaePicker}>
               <Text style={styles.button.font}>Choose Another</Text>
             </TouchableOpacity>
@@ -95,8 +120,8 @@ export const AddPost = ({navigation}) => {
       ) : (
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <FastImage
-            style={{width: 300, height: 300}}
-            source={require('../../assets/background/ff2_white.png')}
+            style={{width: 400, height: 400}}
+            source={backgroundImage}
             resizeMode={FastImage.resizeMode.contain}
           />
 
