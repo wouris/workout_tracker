@@ -4,10 +4,12 @@ import {ExerciseGroup} from '../models/ExerciseGroup';
 import exercisesData from '../services/data.json';
 import FastImage from 'react-native-fast-image';
 import ImageURI from '../utils/ImageURI';
+import {useTheme} from '../utils/ThemeContext';
 
 const PAGE_SIZE = 3; // Set an appropriate page size
 
 const ExercisesScreen = () => {
+  const {theme, toggleTheme} = useTheme();
   const [exerciseGroups, setExerciseGroups] = useState<ExerciseGroup[]>([]);
   const [page, setPage] = useState(1);
 
@@ -29,16 +31,29 @@ const ExercisesScreen = () => {
 
   const styles = StyleSheet.create({
     container: {
+      marginTop: 1,
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
+      font: {
+        fontSize: 16,
+        fontWeight: 'monospace',
+      },
     },
   });
 
   const renderItem = ({item}: {item: ExerciseGroup}) => {
     return (
       <View>
-        <Text>{item.letter}</Text>
+        <Text
+          style={{
+            color: theme === 'dark' ? '#ffffff' : '#000000',
+            textAlign: 'center',
+            fontSize: 16,
+            fontWeight: 'mono',
+          }}>
+          {item.letter}
+        </Text>
         <FlatList
           data={item.exercises}
           keyExtractor={exercise => exercise.id}
@@ -47,9 +62,8 @@ const ExercisesScreen = () => {
           renderItem={({item: exercise}) => {
             return (
               <View style={styles.container}>
-                <Text>{exercise.id}</Text>
-                <Text>{exercise.bodyPart}</Text>
-                <Text>{exercise.name}</Text>
+                <Text style={styles.container.font}>{exercise.bodyPart}</Text>
+                <Text style={styles.container.font}>{exercise.name}</Text>
                 <FastImage
                   source={ImageURI[exercise.bodyPart][exercise.id]}
                   style={{width: 100, height: 100}}

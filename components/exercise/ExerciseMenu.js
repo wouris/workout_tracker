@@ -61,11 +61,11 @@ export const ExerciseMenu = ({navigation}) => {
         }>
         <Text style={styles.font}>EXERCISES</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.box}
-        onPress={() => navigation.dispatch(StackActions.push('RoutineScreen'))}>
-        <Text style={styles.font}>ROUTINES</Text>
-      </TouchableOpacity>
+      {/*<TouchableOpacity*/}
+      {/*  style={styles.box}*/}
+      {/*  onPress={() => navigation.dispatch(StackActions.push('RoutineScreen'))}>*/}
+      {/*  <Text style={styles.font}>ROUTINES</Text>*/}
+      {/*</TouchableOpacity>*/}
     </ImageBackground>
   );
 };

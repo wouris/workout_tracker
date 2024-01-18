@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {BASE_URL} from '../../utils/Constants';
 import axios from 'axios';
 import {getItem, setItem} from '../../utils/Storage';
@@ -18,9 +18,10 @@ import {useTheme} from '../../utils/ThemeContext';
 import FastImage from 'react-native-fast-image';
 import Avatar from '../account/Avatar';
 
-library.add(faSearch, faPlus);
+library.add(faSearch, faPlus, faCheck);
 
 export const Search = ({navigation}) => {
+  const [followedUsers, setFollowedUsers] = useState([]);
   const {theme, toggleTheme} = useTheme();
   const [searchText, setSearchText] = useState('');
   const [data, setData] = useState([]);
@@ -113,36 +114,58 @@ export const Search = ({navigation}) => {
     });
   };
 
-  const handleSearch = text => {
-    setSearchText(text);
+  const follow = async item => {
+    const isFollowing = followedUsers.includes(item.id);
 
-    if (data) {
-      const filtered = data.filter(
-        item =>
-          item.username &&
-          item.username.toLowerCase().includes(text.toLowerCase()),
-      );
-      setFilteredData(filtered);
+    const baseOptions = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: await getItem('Authorization'),
+        USER_ID: await getItem('USER_ID'),
+      },
+      data: {
+        followingId: item.id,
+      },
+    };
+
+    let options;
+
+    if (isFollowing) {
+      // If already following, unfollow
+      options = {
+        ...baseOptions,
+        method: 'DELETE',
+        url: BASE_URL + '/api/social/user/unfollow',
+      };
+    } else {
+      // If not following, follow
+      options = {
+        ...baseOptions,
+        method: 'POST',
+        url: BASE_URL + '/api/social/user/follow',
+      };
+    }
+
+    try {
+      const {data} = await axios.request(options);
+      console.log(data);
+
+      // Update the state to indicate that the button has been pressed
+      if (isFollowing) {
+        setFollowedUsers(prevUsers =>
+          prevUsers.filter(userId => userId !== item.id),
+        );
+      } else {
+        setFollowedUsers(prevUsers => [...prevUsers, item.id]);
+      }
+    } catch (error) {
+      console.error(error.response.data.message);
     }
   };
 
   return (
     <View style={{alignItems: 'center', margin: 10}}>
-      <Pressable style={styles.searchBox}>
-        <FontAwesomeIcon
-          icon={'search'}
-          size={20}
-          color={theme === 'dark' ? '#ffffff' : '#000000'}
-          style={{marginLeft: 15, marginRight: 5}}
-        />
-        <TextInput
-          placeholder={'Search'}
-          placeholderTextColor={theme === 'dark' ? '#A1A1A1' : '#2a2a2a'}
-          style={styles.searchBox.text}
-          value={searchText}
-          onChangeText={handleSearch}
-        />
-      </Pressable>
+      {/* ... (other code) */}
       <View style={styles.modal}>
         <FlatList
           data={filteredData}
@@ -154,20 +177,24 @@ export const Search = ({navigation}) => {
                   <Avatar avatar={item.avatar} />
                 </TouchableOpacity>
                 <View
-                  style={{
-                    flexDirection: 'row',
-                    marginLeft: 10,
-                    width: '60%',
-                  }}>
-                  <Text style={styles.modal.text}>{item.id}</Text>
+                  style={{flexDirection: 'row', marginLeft: 10, width: '60%'}}>
                   <Text style={styles.modal.text}>{item.username}</Text>
                   {/*add follow button functionality*/}
-                  <TouchableOpacity>
-                    <FontAwesomeIcon
-                      icon={'plus'}
-                      size={20}
-                      color={theme === 'dark' ? '#ffffff' : '#000000'}
-                    />
+                  <TouchableOpacity onPress={() => follow(item)}>
+                    {followedUsers.includes(item.id) ? (
+                      <FontAwesomeIcon
+                        icon={'check'}
+                        size={20}
+                        color={theme === 'dark' ? '#ffffff' : '#000000'}
+                        style={{marginLeft: 10}}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={'plus'}
+                        size={20}
+                        color={theme === 'dark' ? '#ffffff' : '#000000'}
+                      />
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>

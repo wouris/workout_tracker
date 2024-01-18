@@ -262,7 +262,7 @@ const Account = ({navigation, route}) => {
               <Pressable>
                 <Text style={styles.followContainer.text}>Posts</Text>
                 <Text style={styles.followContainer.value}>
-                  {userData.posts}
+                  {userData.workouts}
                 </Text>
               </Pressable>
               <Pressable onPress={() => showModal('Followers')}>

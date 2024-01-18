@@ -33,15 +33,67 @@ const GetPost = ({post}) => {
       console.error(error.response.data.message);
     }
   }, []);
-  const handleHeartClick = () => {
-    //implementovat na server request
+  const handleHeartClick = async () => {
+    const baseOptions = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: await getItem('Authorization'),
+        USER_ID: await getItem('USER_ID'),
+      },
+      data: {postId: post.id},
+    };
+
+    let options;
+
+    if (heartClicked) {
+      options = {
+        ...baseOptions,
+        method: 'DELETE',
+        url: BASE_URL + '/api/social/post/unlike',
+      };
+    } else {
+      options = {
+        ...baseOptions,
+        method: 'POST',
+        url: BASE_URL + '/api/social/post/like',
+      };
+    }
+
+    try {
+      const {data} = await axios.request(options);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+
     if (heartClicked) {
       setLikes(likes - 1);
     } else {
       setLikes(likes + 1);
     }
+
     setHeartClicked(!heartClicked);
   };
+  const fetchPostInfo = async () => {
+    const options = {
+      method: 'POST',
+      url: BASE_URL + '/api/social/post/get',
+      headers: {
+        Accept: 'application/json',
+        Authorization: await getItem('Authorization'),
+        USER_ID: await getItem('USER_ID'),
+      },
+      data: {pageSize: 0, pageOffset: 0},
+    };
+
+    try {
+      const {data} = await axios.request(options);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleCommentClick = () => {
     setCommentClicked(!commentClicked);
   };
@@ -71,7 +123,7 @@ const GetPost = ({post}) => {
     cardInteraction: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-around',
+      justifyContent: 'flex-start',
       padding: 10,
       borderWidth: 0.25,
       borderColor: theme === 'dark' ? '#ffffff' : '#000000',
@@ -99,28 +151,23 @@ const GetPost = ({post}) => {
       justifyContent: 'center',
       alignItems: 'center',
     },
+    commentsContainer: {
+      marginTop: 8,
+      borderRadius: 5,
+      padding: 20,
+      borderWidth: 0.5,
+      borderColor: theme === 'dark' ? '#ffffff' : '#000000',
+      backgroundColor: theme === 'dark' ? '#383838' : '#fcfcfc',
+    },
   });
 
   return (
-    // <View style={styles.container}>
-    //   <Text>{item.username}</Text>
-    //   <Image
-    //     source={{uri: `data:image/png;base64,${item.image}`}}
-    //     style={styles.image}
-    //   />
-    //   <Text>{item.description}</Text>
-    //   <View style={styles.interaction}>
-    //     <Text>{item.likes}</Text>
-    //     <Text>ahoj</Text>
-    //   </View>
-    // </View>
-
     <View style={styles.card}>
       <View style={styles.cardHeader}>
         <View style={styles.avatarContainer}>
           <Image
             style={{width: 42, height: 42, borderRadius: 50}}
-            source={{uri: `data:image/png;base64,${userData.avatar}`}}
+            source={{uri: `data:image/png;base64,${post.avatar}`}}
           />
         </View>
         <Text style={styles.cardTitle}>{post.username}</Text>
@@ -130,15 +177,7 @@ const GetPost = ({post}) => {
         style={styles.cardImage}
       />
       <View style={styles.cardInteraction}>
-        <View style={{flexDirection: 'row', gap: 12, alignItems: 'center'}}>
-          <Text
-            style={{
-              color: theme === 'dark' ? '#ffffff' : '#000000',
-              fontFamily: 'bold',
-              fontSize: 15,
-            }}>
-            {likes}
-          </Text>
+        <View style={{flexDirection: 'row', gap: 13, alignItems: 'center'}}>
           <TouchableOpacity onPress={handleHeartClick}>
             <FontAwesomeIcon
               icon={'heart'}
@@ -152,20 +191,47 @@ const GetPost = ({post}) => {
               size={30}
             />
           </TouchableOpacity>
+          <Text
+            style={{
+              color: theme === 'dark' ? '#ffffff' : '#000000',
+              fontFamily: 'bold',
+              fontSize: 15,
+            }}>
+            {likes}
+          </Text>
         </View>
-        <TouchableOpacity onPress={handleCommentClick}>
-          <FontAwesomeIcon
-            icon={'comment'}
-            color={theme === 'dark' ? '#ffffff' : '#2a2a2a'}
-            size={30}
-          />
-        </TouchableOpacity>
       </View>
       <View style={styles.cardContent}>
         <Text style={{color: theme === 'dark' ? '#ffffff' : '#000000'}}>
           {post.description}
         </Text>
       </View>
+
+      {post.topComments.length > 0 && (
+        <View style={styles.commentsContainer}>
+          <View style={{flexDirection: 'row', gap: 5}}>
+            <Text
+              style={{
+                color: theme === 'dark' ? '#ffffff' : '#000000',
+                marginRight: 2,
+              }}>
+              {post.topComments[0]?.username}
+            </Text>
+            <Text
+              style={{
+                color: theme === 'dark' ? '#ffffff' : '#000000',
+              }}>
+              :
+            </Text>
+            <Text
+              style={{
+                color: theme === 'dark' ? '#ffffff' : '#000000',
+              }}>
+              {post.topComments[0]?.content}
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
