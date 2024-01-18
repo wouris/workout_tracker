@@ -109,7 +109,10 @@ function AppNavigator({navigation}) {
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name="New post" component={AddPostScreen} />
       <Tab.Screen name="Workout" component={ExerciseMenuView} />
-      <Tab.Screen name="Account" component={AccountStack} />
+      <Tab.Screen
+        name="Account"
+        component={AccountStack}
+      />
     </Tab.Navigator>
   );
 }

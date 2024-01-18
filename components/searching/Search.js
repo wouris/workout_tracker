@@ -106,6 +106,13 @@ export const Search = ({navigation}) => {
     },
   });
 
+  const redirect = item => {
+    console.log(item.id);
+    navigation.navigate('AccountScreen', {
+      user_id: item.id,
+    });
+  };
+
   const handleSearch = text => {
     setSearchText(text);
 
@@ -143,7 +150,7 @@ export const Search = ({navigation}) => {
             <View style={styles.items}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 {/*Add onPress to navigate to user profile*/}
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => redirect(item)}>
                   <Avatar avatar={item.avatar} />
                 </TouchableOpacity>
                 <View
@@ -152,6 +159,7 @@ export const Search = ({navigation}) => {
                     marginLeft: 10,
                     width: '60%',
                   }}>
+                  <Text style={styles.modal.text}>{item.id}</Text>
                   <Text style={styles.modal.text}>{item.username}</Text>
                   {/*add follow button functionality*/}
                   <TouchableOpacity>

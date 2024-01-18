@@ -39,6 +39,7 @@ library.add(
 
 const PAGE_SIZE = 3;
 const Account = ({navigation, route}) => {
+  const {user_id} = route.params || '';
   const {theme, toggleTheme} = useTheme();
   const {navigateToAccountModal} = route.params || {};
   const [userData, setUserData] = useState({});
@@ -46,18 +47,20 @@ const Account = ({navigation, route}) => {
   const [button, setButton] = useState('Posts');
 
   useEffect(() => {
+    console.log("REFRESH")
     const loadPosts = async () => {
+      console.log('UserID' + user_id);
       try {
-        const user_id = await getItem('USER_ID');
-        const response = await axios.get(
-          BASE_URL + '/api/social/post/get/' + user_id,
-          {
-            headers: {
-              Authorization: await getItem('Authorization'),
-              USER_ID: user_id,
-            },
+        const loggedUser = await getItem('USER_ID');
+        const requestString =
+          BASE_URL + '/api/social/post/get/' + (user_id || loggedUser);
+        console.log(requestString);
+        const response = await axios.get(requestString, {
+          headers: {
+            Authorization: await getItem('Authorization'),
+            USER_ID: loggedUser,
           },
-        );
+        });
 
         console.log(response.data);
 
@@ -67,32 +70,32 @@ const Account = ({navigation, route}) => {
       }
     };
 
-    loadPosts();
-  }, []);
+    const loadUserData = async () => {
+      const loggedUser = await getItem('USER_ID');
+      const options = {
+        method: 'GET',
+        url: BASE_URL + '/api/social/user/' + (user_id || loggedUser) + '/info',
+        headers: {
+          Accept: 'application/json',
+          Authorization: await getItem('Authorization'),
+          USER_ID: loggedUser,
+        },
+      };
+
+      try {
+        const {data} = await axios.request(options);
+        setUserData(data);
+      } catch (error) {
+        console.error(error.response.data.message);
+      }
+    };
+
+    loadUserData().then(loadPosts());
+  }, [navigation, route.params, user_id]);
 
   const showModal = type => {
     navigation.dispatch(StackActions.push('AccountModal', {type}));
   };
-
-  useEffect(async () => {
-    const USER_ID = await getItem('USER_ID');
-    const options = {
-      method: 'GET',
-      url: BASE_URL + `/api/social/user/${USER_ID}/info`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: await getItem('Authorization'),
-        USER_ID: await getItem('USER_ID'),
-      },
-    };
-
-    try {
-      const {data} = await axios.request(options);
-      setUserData(data);
-    } catch (error) {
-      console.error(error.response.data.message);
-    }
-  }, []);
 
   const logout = async () => {
     await setItem('Authorization', null);
@@ -363,7 +366,6 @@ const AccountStack = ({navigation}) => {
         header: ({navigation, route, options}) => {
           let title = 'Account';
           let modal = false;
-
           if (route.name === 'AccountModal') {
             title = route.params.type;
             modal = true;
@@ -380,7 +382,10 @@ const AccountStack = ({navigation}) => {
           );
         },
       })}>
-      <Stack.Screen name="AccountScreen" component={Account} />
+      <Stack.Screen
+        name="AccountScreen"
+        component={Account}
+      />
       <Stack.Screen name="AccountModal" component={AccountModal} />
     </Stack.Navigator>
   );
